@@ -1,7 +1,7 @@
 //Global variables
 var cols;
 var rows;
-var w = 50; // horizontal size of each cell
+var w = 20; // horizontal size of each cell
 var h = w; // vertical size of each cell
 
 
@@ -66,6 +66,38 @@ function setup() {
 }
 
 function draw() {
+  nextA_StarStep()
+  
+  //Draw everything
+  background(cWhite);
+  for (let i = 0; i < rows; i++) {
+    for (var j = 0; j < cols; j++) {
+      grid[i][j].show();
+    }
+  }
+  for (let i = 0; i < closedSet.length; i++) {
+    closedSet[i].show(cGrey);
+  }
+  for (let i = 0; i < openSet.length; i++) {
+    openSet[i].show(cGandY);
+  }
+  
+  // Find the path by working backwards
+  path = [];
+  var temp = current;
+  path.push(temp);
+  while (temp.previous) {
+    //console.log(temp.i + ", "+ temp.j);
+    path.push(temp.previous);
+    temp = temp.previous;
+  }
+   for (var i = 0; i < path.length; i++) {
+     path[i].show(cBlue);
+   }
+  end.show(cRed);
+}
+
+function nextA_StarStep() {
   if(openSet.length > 0){//if still searching
     //we can order them with "openSet.sort(spotComparison);"
     //but we search only for the best
@@ -123,32 +155,4 @@ function draw() {
     noLoop();
     return;
   }
-  
-  //Draw everything
-  background(cWhite);
-  for (let i = 0; i < rows; i++) {
-    for (var j = 0; j < cols; j++) {
-      grid[i][j].show();
-    }
-  }
-  for (let i = 0; i < closedSet.length; i++) {
-    closedSet[i].show(cGrey);
-  }
-  for (let i = 0; i < openSet.length; i++) {
-    openSet[i].show(cGandY);
-  }
-  
-  // Find the path by working backwards
-  path = [];
-  var temp = current;
-  path.push(temp);
-  while (temp.previous) {
-    //console.log(temp.i + ", "+ temp.j);
-    path.push(temp.previous);
-    temp = temp.previous;
-  }
-   for (var i = 0; i < path.length; i++) {
-     path[i].show(cBlue);
-   }
-  end.show(cRed);
 }
