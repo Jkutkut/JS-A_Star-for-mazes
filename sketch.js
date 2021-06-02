@@ -1,9 +1,11 @@
 //Global variables
-var cols = 50;
-var rows = 50;
+var cols;
+var rows;
+var w = 12;
+var h = w;// Width and height of each cell of grid
+
 
 var grid = new Array(cols);
-var w, h;// Width and height of each cell of grid
 
 var start, end;
 var openSet = [];
@@ -21,11 +23,28 @@ function heuristics(a, b){//dist a to b (heuristitcs)
 
 
 function setup() {
-  createCanvas(600, 600);
+
+  rows = Math.floor(windowWidth / w);
+  cols = Math.floor(windowHeight / h);
+
+  if (rows < cols) {
+    cols = rows;
+  }
+  else {
+    rows = cols;
+  }
+
+
+  createCanvas(rows * w, rows * w);
+  // createCanvas(rows * w, cols * h);
   background(230);
-  //update w, h:
-  w = width / cols;
-  h = height / rows;
+  
+
+  // createCanvas(600, 600);
+  // background(230);
+  // //update w, h:
+  // w = width / cols;
+  // h = height / rows;
   
   //setup colors:
   cWhite = color(240);
