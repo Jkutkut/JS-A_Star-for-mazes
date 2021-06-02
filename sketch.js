@@ -1,11 +1,11 @@
 //Global variables
 var cols;
 var rows;
-var w = 12;
-var h = w;// Width and height of each cell of grid
+var w = 50; // horizontal size of each cell
+var h = w; // vertical size of each cell
 
 
-var grid = new Array(cols);
+var grid;
 
 var start, end;
 var openSet = [];
@@ -27,24 +27,9 @@ function setup() {
   rows = Math.floor(windowWidth / w);
   cols = Math.floor(windowHeight / h);
 
-  if (rows < cols) {
-    cols = rows;
-  }
-  else {
-    rows = cols;
-  }
 
-
-  createCanvas(rows * w, rows * w);
-  // createCanvas(rows * w, cols * h);
+  createCanvas(rows * w, cols * h);
   background(230);
-  
-
-  // createCanvas(600, 600);
-  // background(230);
-  // //update w, h:
-  // w = width / cols;
-  // h = height / rows;
   
   //setup colors:
   cWhite = color(240);
@@ -57,21 +42,22 @@ function setup() {
 
   
   //create grid and add neighbors:
+  grid = new Array(rows);
   for(let i = 0; i < rows;i++){
-    grid[i] = new Array(rows);
-    for(let j = 0; j < rows; j++){
+    grid[i] = new Array(cols);
+    for(let j = 0; j < cols; j++){
       grid[i][j] = new spot(i,j);
     }
   }
   for(let i = 0; i < rows;i++){
-    for(let j = 0; j < rows; j++){
+    for(let j = 0; j < cols; j++){
       grid[i][j].addNeighbors(grid);
     }
   }
   
   //add start and end (there are not walls)
   start = grid[0][0];
-  end = grid[cols - 1][rows - 1];
+  end = grid[rows - 1][cols - 1];
   start.wall = false;
   end.wall = false;
   
@@ -140,8 +126,8 @@ function draw() {
   
   //Draw everything
   background(cWhite);
-  for (let i = 0; i < cols; i++) {
-    for (var j = 0; j < rows; j++) {
+  for (let i = 0; i < rows; i++) {
+    for (var j = 0; j < cols; j++) {
       grid[i][j].show();
     }
   }
