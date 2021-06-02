@@ -1,7 +1,7 @@
 //Global variables
 var cols;
 var rows;
-var w = 20; // horizontal size of each cell
+var w = 10; // horizontal size of each cell
 var h = w; // vertical size of each cell
 
 
@@ -42,13 +42,17 @@ function setup() {
 
   
   //create grid and add neighbors:
-  grid = new Array(rows);
-  for(let i = 0; i < rows;i++){
-    grid[i] = new Array(cols);
-    for(let j = 0; j < cols; j++){
-      grid[i][j] = new spot(i,j);
-    }
-  }
+
+  // grid = new Array(rows);
+  // for(let i = 0; i < rows;i++){
+  //   grid[i] = new Array(cols);
+  //   for(let j = 0; j < cols; j++){
+  //     grid[i][j] = new spot(i,j);
+  //   }
+  // }
+  grid = primMaze(rows, cols);
+
+
   for(let i = 0; i < rows;i++){
     for(let j = 0; j < cols; j++){
       grid[i][j].addNeighbors(grid);
@@ -56,8 +60,8 @@ function setup() {
   }
   
   //add start and end (there are not walls)
-  start = grid[0][0];
-  end = grid[rows - 1][cols - 1];
+  start = grid[1][0];
+  end = grid[rows - 2][cols - 1];
   start.wall = false;
   end.wall = false;
 

@@ -7,7 +7,7 @@ function primMaze(r, c) {
         }
     }
 
-    maze[1][0] = false;
+    maze[1][0].wall = false;
     let partOfMaze = new Set();
     maze[1][1].wall = false; // Pick a cell, 
     partOfMaze.add(maze[1][1]); // mark it as part of the maze
@@ -16,7 +16,6 @@ function primMaze(r, c) {
     walls.add(maze[1][2]);
     walls.add(maze[2][1]);
 
-    let iterations = 0;
     let getRandomItem = function(set) {
         let items = Array.from(set);
         return items[Math.floor(Math.random() * items.length)];
@@ -35,7 +34,7 @@ function primMaze(r, c) {
     let inBounds = function(r, c, rMax, cMax) {
         return r > 0 && c > 0 && r < rMax - 1 && c < cMax - 1;
     }
-    while (walls.size > 0 && iterations++ < 1000) {
+    while (walls.size > 0) {
         let w = getRandomItem(walls);
         let cell1, cell2; //  cells that the wall divides
         if (w.i % 2 == 0) { // Horizontal wall
