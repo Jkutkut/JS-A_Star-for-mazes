@@ -36,25 +36,18 @@ function primMaze(r, c) {
         return r > 0 && c > 0 && r < rMax - 1 && c < cMax - 1;
     }
     while (walls.size > 0 && iterations++ < 1000) {
-        console.log("iteration " + iterations);
-
         let w = getRandomItem(walls);
         let cell1, cell2; //  cells that the wall divides
-        console.log("(" + w.i + ", " + w.j + ")");
-        if (w.i % 2 == 0) {
-            console.log("Horizontal wall");
+        if (w.i % 2 == 0) { // Horizontal wall
             cell1 = maze[w.i - 1][w.j];
             cell2 = maze[w.i + 1][w.j];
         }
-        else if (w.j % 2 == 0) {
-            console.log("Vertical wall");
+        else if (w.j % 2 == 0) { // Vertical wall
             cell1 = maze[w.i][w.j - 1];
             cell2 = maze[w.i][w.j + 1];
         }
-        console.log("Cells: (" + cell1.i + ", " + cell1.j + "), (" + cell2.i + ", " + cell2.j + ") -> " + partOfMaze.has(cell1) + ", " + partOfMaze.has(cell2));
 
         let notVisitedCell = xor(cell1, cell2, partOfMaze);
-        console.log("Not visited: (" + notVisitedCell.i + ", " + notVisitedCell.j + ")")
         if (notVisitedCell) { // If only one of the two cells that the wall divides is visited
             w.wall = false; // Make the wall a passage
             // mark the unvisited cell as part of the maze.
@@ -104,8 +97,4 @@ function printM(matrix){
         str += " \n";
     }
     console.log(str);
-}
-
-window.onload = function() {
-    printM(primMaze(15, 15));
 }
