@@ -60,40 +60,28 @@ function setup() {
   end = grid[rows - 1][cols - 1];
   start.wall = false;
   end.wall = false;
+
+  strokeWeight(0);
+  for (let i = 0; i < rows; i++) {
+    for (var j = 0; j < cols; j++) {
+      grid[i][j].show();
+    }
+  }
   
   //we start from the begining
   openSet.push(start);
 }
 
 function draw() {
+  for (var i = 0; i < path.length; i++) {
+    path[i].show(cGrey);
+  }
+
   nextA_StarStep()
   
-  //Draw everything
-  background(cWhite);
-  for (let i = 0; i < rows; i++) {
-    for (var j = 0; j < cols; j++) {
-      grid[i][j].show();
-    }
+  for (var i = 0; i < path.length; i++) {
+    path[i].show(cBlue);
   }
-  for (let i = 0; i < closedSet.length; i++) {
-    closedSet[i].show(cGrey);
-  }
-  for (let i = 0; i < openSet.length; i++) {
-    openSet[i].show(cGandY);
-  }
-  
-  // Find the path by working backwards
-  path = [];
-  var temp = current;
-  path.push(temp);
-  while (temp.previous) {
-    //console.log(temp.i + ", "+ temp.j);
-    path.push(temp.previous);
-    temp = temp.previous;
-  }
-   for (var i = 0; i < path.length; i++) {
-     path[i].show(cBlue);
-   }
   end.show(cRed);
 }
 
@@ -138,6 +126,7 @@ function nextA_StarStep() {
           neighbor.g = tempG;
           newPath = true;
           openSet.push(neighbor);
+          neighbor.show(cGandY);
         }
 
         // Yes, it's a better path
@@ -154,5 +143,15 @@ function nextA_StarStep() {
     console.log("Ups, there is no way to go to the end");
     noLoop();
     return;
+  }
+
+  // Find the path by working backwards
+  path = [];
+  var temp = current;
+  path.push(temp);
+  while (temp.previous) {
+    //console.log(temp.i + ", "+ temp.j);
+    path.push(temp.previous);
+    temp = temp.previous;
   }
 }

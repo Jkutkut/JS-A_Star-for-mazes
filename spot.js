@@ -1,4 +1,4 @@
-function spot(x, y){
+function spot(x, y, wall=undefined){
   this.i = x;
   this.j = y;
   
@@ -10,7 +10,13 @@ function spot(x, y){
   //More data
   this.neighbors = [];
   this.previous = undefined;
-  this.wall = random(1) < 0.4;
+  
+  if (wall != undefined) {
+    this.wall = wall;
+  }
+  else {
+    this.wall = random(1) < 0.4;
+  }
   
   this.show = function(col){
     if(this.wall){
