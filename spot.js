@@ -14,9 +14,10 @@ function spot(x, y){
   
   this.show = function(col){
     if(this.wall){
-      stroke(cBlack);
+      fill(cWhite);
+      rect(this.i * w, this.j * h, w, h);
       fill(cBlack);
-      rect(this.i * w, this.j * h, w - 1, h - 1);
+      rect(this.i * w, this.j * h, w - 0.5, h - 0.5);
     }
     else if(col){
       //noStroke();
