@@ -1,4 +1,4 @@
-# Js_Path-finding
+# JS-A_Star-for-mazes
 
 Aplicación del algoritmo A* para encontrar la salida más eficiente para salir de un laberinto.
 
