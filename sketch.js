@@ -25,7 +25,9 @@ function heuristics(a, b){//dist a to b (heuristitcs)
 function setup() {
 
   rows = Math.floor(windowWidth / w);
+  if (rows % 2 == 0) rows--;
   cols = Math.floor(windowHeight / h);
+  if (cols % 2 == 0) cols--;
 
 
   createCanvas(rows * w, cols * h);

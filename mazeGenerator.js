@@ -32,7 +32,7 @@ function primMaze(r, c) {
         return false;
     }
     let inBounds = function(r, c, rMax, cMax) {
-        return r > 0 && c > 0 && r < rMax - 1 && c < cMax - 1;
+        return r > 0 && c > 0 && r < rMax - 2 && c < cMax - 2;
     }
     while (walls.size > 0) {
         let w = getRandomItem(walls);
@@ -67,7 +67,9 @@ function primMaze(r, c) {
     }
 
     let i = r - 2, j = c - 1;
+
     while (maze[i][j].wall) {
+        console.log("hey")
         maze[i][j].wall = false;
         j--;
     }
