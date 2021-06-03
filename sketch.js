@@ -1,163 +1,35 @@
-//Global variables
-var cols;
-var rows;
-var w = 10; // horizontal size of each cell
-var h = w; // vertical size of each cell
-
-
-var grid;
-
-var start, end;
-var openSet = [];
-var closedSet = [];
-
-// The road taken
-var path = [];
-
-//colors:
-var cWhite, cBlack, cBlue, cYellow, cGandY, cGrey, cRed;
-
-function heuristics(a, b){//dist a to b (heuristitcs)
-  return dist(a.i, a.j, b.i, b.j);
-}
-
+var maze;
+var w = 10;
+var h = w;
 
 function setup() {
-
+  maze = new Maze(windowWidth, windowHeight, w, h);
+  
   rows = Math.floor(windowWidth / w);
   if (rows % 2 == 0) rows--;
   cols = Math.floor(windowHeight / h);
   if (cols % 2 == 0) cols--;
 
-
   createCanvas(rows * w, cols * h);
-  background(230);
-  
-  //setup colors:
-  cWhite = color(240);
-  cBlack = color(0,0,0);
-  cBlue = color(0, 255, 255);
-  cYellow = color(255, 255, 0);
-  cGandY = color(200, 255, 0);
-  cGrey = color(161, 161, 161);
-  cRed = color(255, 0, 0);
-
-  
-  //create grid and add neighbors:
-
-  // grid = new Array(rows);
-  // for(let i = 0; i < rows;i++){
-  //   grid[i] = new Array(cols);
-  //   for(let j = 0; j < cols; j++){
-  //     grid[i][j] = new Spot(i,j);
-  //   }
-  // }
-  grid = primMaze(rows, cols);
-
-
-  for(let i = 0; i < rows;i++){
-    for(let j = 0; j < cols; j++){
-      grid[i][j].addNeighbors(grid);
-    }
-  }
-  
-  //add start and end (there are not walls)
-  start = grid[1][0];
-  end = grid[rows - 2][cols - 1];
-  start.wall = false;
-  end.wall = false;
 
   strokeWeight(0);
-  for (let i = 0; i < rows; i++) {
-    for (var j = 0; j < cols; j++) {
-      grid[i][j].show();
-    }
+  for (let i = 0; i < maze.rows; i++) {
+      for (let j = 0; j < maze.cols; j++) {
+          maze.grid[i][j].show();
+      }
   }
-  
-  //we start from the begining
-  openSet.push(start);
+
 }
 
 function draw() {
-  for (var i = 0; i < path.length; i++) {
-    path[i].show(cGrey);
+  for (var i = 0; i < maze.path.length; i++) {
+    maze.path[i].show(Maze.COLORS.cGrey);
   }
 
-  nextA_StarStep()
+  maze.nextA_StarStep();
   
-  for (var i = 0; i < path.length; i++) {
-    path[i].show(cBlue);
+  for (var i = 0; i < maze.path.length; i++) {
+    maze.path[i].show(Maze.COLORS.cBlue);
   }
-  end.show(cRed);
-}
-
-function nextA_StarStep() {
-  if(openSet.length > 0){//if still searching
-    //we can order them with "openSet.sort(spotComparison);"
-    //but we search only for the best
-    var indexBestSpot = 0;
-    for(let i = 0; i < openSet.length; i++){
-      if(openSet[i].f < openSet[indexBestSpot].f){//if i better index
-        indexBestSpot = i;
-      }
-    }
-    var current = openSet[indexBestSpot];
-    if(current === end){//if current is the end => finish
-      console.log("Done!, there is a way!");
-      for(let p = path.length - 1, q = 1; p > 0; p--, q++){
-        console.log(q + "º (" + path[p].i + ", " + path[p].j +")");
-      }
-      noLoop();
-    }
-    
-    openSet.splice(indexBestSpot, 1);//remove the best from openSet
-    closedSet.push(current);//add it to the closed
-    
-    var neighbors = current.neighbors;//get them from current
-    for (var i = 0; i < neighbors.length; i++) {
-      var neighbor = neighbors[i];
-
-      // Valid next spot?
-      if (!closedSet.includes(neighbor) && !neighbor.wall) {
-        var tempG = current.g + heuristics(neighbor, current);
-
-        // Is this a better path than before?
-        var newPath = false;
-        if (openSet.includes(neighbor)) {
-          if (tempG < neighbor.g) {
-            neighbor.g = tempG;
-            newPath = true;
-          }
-        } else {
-          neighbor.g = tempG;
-          newPath = true;
-          openSet.push(neighbor);
-          neighbor.show(cGandY);
-        }
-
-        // Yes, it's a better path
-        if (newPath) {
-          neighbor.h = heuristics(neighbor, end);
-          neighbor.f = neighbor.g + neighbor.h;
-          neighbor.previous = current;
-        }
-      }
-
-    }
-  }
-  else{//if no other way to go
-    console.log("Ups, there is no way to go to the end");
-    noLoop();
-    return;
-  }
-
-  // Find the path by working backwards
-  path = [];
-  var temp = current;
-  path.push(temp);
-  while (temp.previous) {
-    //console.log(temp.i + ", "+ temp.j);
-    path.push(temp.previous);
-    temp = temp.previous;
-  }
+  maze.end.show(Maze.COLORS.cRed);
 }
