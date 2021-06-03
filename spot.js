@@ -1,4 +1,4 @@
-class Spot {
+class MazeSpot {
     constructor (x, y, wall=undefined) {
         this.i = x;
         this.j = y;
@@ -37,20 +37,6 @@ class Spot {
 
     addNeighbors() {
         this.neighbors = [];
-        // Allow diagonal moves
-
-        // for (let i = -1; i <= 1; i++) {
-        //   for (let j = -1; j <= 1; j++) {
-        //     let x = this.i + i;
-        //     let y = this.j + j;
-
-        //     if (j === 0 && i === 0 ||
-        //         x < 0 || y < 0 ||
-        //         x >= rows || y >= cols) continue
-        //     this.neighbors.push(grid[x][y]);
-        //   }
-        // }
-
         // Only vertical and horizontal moves
         for (let i = -1; i <= 1; i++) {
             let x = this.i + i;
@@ -65,6 +51,28 @@ class Spot {
             y = this.j + i;
             if (!(x < 0 || y < 0 ||
                   x >= rows || y >= cols)) {
+                this.neighbors.push(grid[x][y]);
+            }
+        }
+    }
+}
+
+class Spot extends MazeSpot {
+    constructor (x, y, wall=undefined) {
+        super(x, y, wall);
+    }
+
+    addNeighbors() { // Allow diagonal moves
+        this.neighbors = [];
+        for (let i = -1; i <= 1; i++) {
+            for (let j = -1; j <= 1; j++) {
+                let x = this.i + i;
+                let y = this.j + j;
+    
+                if (j === 0 && i === 0 ||
+                    x < 0 || y < 0 ||
+                    x >= rows || y >= cols) continue;
+                
                 this.neighbors.push(grid[x][y]);
             }
         }
