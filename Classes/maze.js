@@ -109,9 +109,6 @@ class MazePrototype {
         
         if (this.current === this.end) {
             console.log("Done!, there is a way!");
-            for(let p = this.path.length - 1, q = 1; p > 0; p--, q++){
-                console.log(q + "º (" + this.path[p].i + ", " + this.path[p].j +")");
-            }
         }
         else { //if no other way to go
             console.log("Ups, there is no way to go to the end");
@@ -128,6 +125,13 @@ class MazePrototype {
         while (temp.previous) {
             this.path.push(temp.previous);
             temp = temp.previous;
+        }
+    }
+
+    printPath() {
+        // Show the way
+        for(let p = this.path.length - 1, q = 1; p > 0; p--, q++){
+            console.log(q + "º (" + this.path[p].i + ", " + this.path[p].j +")");
         }
     }
 

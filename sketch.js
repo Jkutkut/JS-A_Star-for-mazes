@@ -1,6 +1,6 @@
 var maze;
 var currentMazeType;
-var w = 13;
+var w = 25;
 var h = w;
 
 var onLoop;
