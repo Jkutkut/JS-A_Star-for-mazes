@@ -1,39 +1,41 @@
-function spot(x, y, wall=undefined){
-    this.i = x;
-    this.j = y;
+class Spot {
+    constructor (x, y, wall=undefined) {
+        this.i = x;
+        this.j = y;
 
-    //A* data
-    this.g = 0;//cost until here
-    this.h = 0;//heuristics
-    this.f = 0;//cost function
+        //A* data
+        this.g = 0;//cost until here
+        this.h = 0;//heuristics
+        this.f = 0;//cost function
 
-    //More data
-    this.neighbors = [];
-    this.previous = undefined;
+        //More data
+        this.neighbors = [];
+        this.previous = undefined;
 
-    if (wall != undefined) {
-        this.wall = wall;
+        if (wall != undefined) {
+            this.wall = wall;
+        }
+        else {
+            this.wall = random(1) < 0.4;
+        }
     }
-    else {
-        this.wall = random(1) < 0.4;
-    }
 
-    this.show = function(col){
+    show(c) {
         if(this.wall){
             fill(cWhite);
             rect(this.i * w, this.j * h, w, h);
             fill(cBlack);
             rect(this.i * w, this.j * h, w - 0.5, h - 0.5);
         }
-        else if(col){
+        else if(c){
             //noStroke();
-            stroke(col);
-            fill(col);
+            // stroke(col);
+            fill(c);
             rect(this.i * w, this.j * h, w - 1, h - 1);
         }
     }
 
-    this.addNeighbors = function(grid){
+    addNeighbors() {
         this.neighbors = [];
         // Allow diagonal moves
 

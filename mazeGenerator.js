@@ -4,7 +4,7 @@ function primMaze(r, c) {
     for (let i = 0; i < r; i++) {
         maze.push([]);
         for (let j = 0; j < c; j++) {
-            maze[i].push(new spot(i, j, true));
+            maze[i].push(new Spot(i, j, true));
         }
     }
 

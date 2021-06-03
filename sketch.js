@@ -39,7 +39,7 @@ function setup() {
   cBlue = color(0, 255, 255);
   cYellow = color(255, 255, 0);
   cGandY = color(200, 255, 0);
-  cGrey = color(190, 190, 190);
+  cGrey = color(161, 161, 161);
   cRed = color(255, 0, 0);
 
   
@@ -49,7 +49,7 @@ function setup() {
   // for(let i = 0; i < rows;i++){
   //   grid[i] = new Array(cols);
   //   for(let j = 0; j < cols; j++){
-  //     grid[i][j] = new spot(i,j);
+  //     grid[i][j] = new Spot(i,j);
   //   }
   // }
   grid = primMaze(rows, cols);
