@@ -51,8 +51,8 @@ class MazePrototype {
 
     initGrid() {}
 
-    nextA_StarStep() {
-        if(this.openSet.length > 0) { // if still searching
+    *aStar() {
+        while(this.openSet.length > 0) { // if still searching
             //we can order them with "openSet.sort(spotComparison);"
             //but we search only for the best
             let indexBestSpot = 0;
@@ -63,11 +63,7 @@ class MazePrototype {
             }
             this.current = this.openSet[indexBestSpot];
             if(this.current === this.end) { // if current is the end => finish
-                console.log("Done!, there is a way!");
-                for(let p = this.path.length - 1, q = 1; p > 0; p--, q++){
-                    console.log(q + "º (" + this.path[p].i + ", " + this.path[p].j +")");
-                }
-                noLoop();
+                break;
             }
 
             this.openSet.splice(indexBestSpot, 1);//remove the best from openSet
@@ -104,14 +100,28 @@ class MazePrototype {
                     }
                 }
             }
-        }
-        else{//if no other way to go
-            console.log("Ups, there is no way to go to the end");
-            noLoop();
-            return;
-        }
 
-        // Find the path by working backwards
+            // Find the path by working backwards
+            this.updatePath();
+
+            yield;
+        }
+        
+        if (this.current === this.end) {
+            console.log("Done!, there is a way!");
+            for(let p = this.path.length - 1, q = 1; p > 0; p--, q++){
+                console.log(q + "º (" + this.path[p].i + ", " + this.path[p].j +")");
+            }
+        }
+        else { //if no other way to go
+            console.log("Ups, there is no way to go to the end");
+        }
+        this.updatePath();
+        noLoop();
+        onLoop = false;
+    }
+
+    updatePath() {
         this.path = [];
         let temp = this.current;
         this.path.push(temp);
