@@ -3,6 +3,7 @@ var w = 10;
 var h = w;
 
 function setup() {
+  // maze = new RandomMaze(windowWidth, windowHeight, w, h);
   maze = new Maze(windowWidth, windowHeight, w, h);
   
   rows = Math.floor(windowWidth / w);

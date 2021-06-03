@@ -22,9 +22,9 @@ class MazeSpot {
 
     show(c) {
         if(this.wall){
-            fill(cWhite);
+            fill(Maze.COLORS.cWhite);
             rect(this.i * w, this.j * h, w, h);
-            fill(cBlack);
+            fill(Maze.COLORS.cBlack);
             rect(this.i * w, this.j * h, w - 0.5, h - 0.5);
         }
         else if(c){
@@ -35,7 +35,7 @@ class MazeSpot {
         }
     }
 
-    addNeighbors() {
+    addNeighbors(parent) {
         this.neighbors = [];
         // Only vertical and horizontal moves
         for (let i = -1; i <= 1; i++) {
@@ -43,15 +43,15 @@ class MazeSpot {
             let y = this.j;
 
             if (!(x < 0 || y < 0 ||
-                  x >= rows || y >= cols)) {
-                this.neighbors.push(grid[x][y]);
+                  x >= parent.rows || y >= parent.cols)) {
+                this.neighbors.push(parent.grid[x][y]);
             }
 
             x = this.i;
             y = this.j + i;
             if (!(x < 0 || y < 0 ||
-                  x >= rows || y >= cols)) {
-                this.neighbors.push(grid[x][y]);
+                  x >= parent.rows || y >= parent.cols)) {
+                this.neighbors.push(parent.grid[x][y]);
             }
         }
     }
@@ -62,7 +62,7 @@ class Spot extends MazeSpot {
         super(x, y, wall);
     }
 
-    addNeighbors() { // Allow diagonal moves
+    addNeighbors(parent) { // Allow diagonal moves
         this.neighbors = [];
         for (let i = -1; i <= 1; i++) {
             for (let j = -1; j <= 1; j++) {
@@ -71,9 +71,9 @@ class Spot extends MazeSpot {
     
                 if (j === 0 && i === 0 ||
                     x < 0 || y < 0 ||
-                    x >= rows || y >= cols) continue;
+                    x >= parent.rows || y >= parent.cols) continue;
                 
-                this.neighbors.push(grid[x][y]);
+                this.neighbors.push(parent.grid[x][y]);
             }
         }
     }

@@ -30,12 +30,13 @@ class MazePrototype {
 
         for(let i = 0; i < this.rows; i++){ // Tell each spot their neighbors
             for(let j = 0; j < this.cols; j++){
-                grid[i][j].addNeighbors(this.grid);
+                this.grid[i][j].addNeighbors(this);
             }
         }
 
         //add start and end (they are not walls)
         this.start = this.grid[1][0];
+        this.current;
         this.end = this.grid[this.rows - 2][this.cols - 1];
         this.start.wall = false;
         this.end.wall = false;
@@ -45,7 +46,7 @@ class MazePrototype {
         this.path = [];
 
         //we start from the begining
-        openSet.push(start);
+        this.openSet.push(this.start);
     }
 
     initGrid() {}
@@ -60,8 +61,8 @@ class MazePrototype {
                     indexBestSpot = i;
                 }
             }
-            let current = this.openSet[indexBestSpot];
-            if(current === this.end) { // if current is the end => finish
+            this.current = this.openSet[indexBestSpot];
+            if(this.current === this.end) { // if current is the end => finish
                 console.log("Done!, there is a way!");
                 for(let p = this.path.length - 1, q = 1; p > 0; p--, q++){
                     console.log(q + "º (" + this.path[p].i + ", " + this.path[p].j +")");
@@ -70,15 +71,15 @@ class MazePrototype {
             }
 
             this.openSet.splice(indexBestSpot, 1);//remove the best from openSet
-            this.closedSet.push(current);//add it to the closed
+            this.closedSet.push(this.current);//add it to the closed
 
-            let neighbors = current.neighbors;//get them from current
+            let neighbors = this.current.neighbors;//get them from current
             for (let i = 0; i < neighbors.length; i++) {
                 let neighbor = neighbors[i];
 
                 // Valid next spot?
                 if (!this.closedSet.includes(neighbor) && !neighbor.wall) {
-                    let tempG = current.g + this.heuristics(neighbor, current);
+                    let tempG = this.current.g + this.heuristics(neighbor, this.current);
 
                     // Is this a better path than before?
                     let newPath = false;
@@ -92,14 +93,14 @@ class MazePrototype {
                         neighbor.g = tempG;
                         newPath = true;
                         this.openSet.push(neighbor);
-                        neighbor.show(cGandY);
+                        neighbor.show(Maze.COLORS.cGandY);
                     }
 
                     // Yes, it's a better path
                     if (newPath) {
-                        neighbor.h = this.heuristics(neighbor, end);
+                        neighbor.h = this.heuristics(neighbor, this.end);
                         neighbor.f = neighbor.g + neighbor.h;
-                        neighbor.previous = current;
+                        neighbor.previous = this.current;
                     }
                 }
             }
@@ -112,7 +113,7 @@ class MazePrototype {
 
         // Find the path by working backwards
         this.path = [];
-        let temp = current;
+        let temp = this.current;
         this.path.push(temp);
         while (temp.previous) {
             this.path.push(temp.previous);
@@ -131,7 +132,7 @@ class Maze extends MazePrototype {
     }
 
     initGrid() {
-        this.grid = primMaze(rows, cols);
+        this.grid = primMaze(this.rows, this.cols);
     }
 }
 
@@ -143,9 +144,9 @@ class RandomMaze extends MazePrototype {
     initGrid() {
         this.grid = new Array(this.rows);
         for(let i = 0; i < this.rows; i++) {
-            grid[i] = new Array(this.cols);
+            this.grid[i] = new Array(this.cols);
             for(let j = 0; j < this.cols; j++){
-                grid[i][j] = new Spot(i, j);
+                this.grid[i][j] = new Spot(i, j);
             }
         }
     }
