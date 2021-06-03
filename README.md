@@ -1,4 +1,4 @@
-# JS_Path-finding
+# JS-A_Star-for-mazes
 Application to find fastest way to exit a maze using A* algorithm. 
 
 The js generates a random maze and it shows you graphically how A* Algorithm works. The maze is generated using Randomized Prim's algorithm.
