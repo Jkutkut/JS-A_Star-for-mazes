@@ -1,3 +1,6 @@
+/**
+ * Class with all the logic used on the mazeGenerators
+ */
 class MazePrototype {
     static COLORS = {
         cWhite: [240],
@@ -11,7 +14,7 @@ class MazePrototype {
 
     constructor(canvasWidth, canvasHeight, cellWidth, cellHeight=cellWidth) {
         
-        this.size = {
+        this.size = { // All properties of the size of the maze is stored here
             width: canvasWidth,
             height: canvasHeight,
             w: cellWidth,
@@ -24,9 +27,9 @@ class MazePrototype {
         this.cols = Math.floor(canvasHeight / cellHeight);
         if (this.cols % 2 == 0) this.cols--;
 
-        // A* variables
+
         this.grid;
-        this.initGrid(); // update grid
+        this.initGrid(); // create grid (different for each maze generator)
 
         for(let i = 0; i < this.rows; i++){ // Tell each spot their neighbors
             for(let j = 0; j < this.cols; j++){
@@ -34,11 +37,12 @@ class MazePrototype {
             }
         }
 
-        //add start and end (they are not walls)
-        this.start = this.grid[1][0];
+        
+        // A* variables
+        this.start = this.grid[1][0]; // starting cell
         this.current;
-        this.end = this.grid[this.rows - 2][this.cols - 1];
-        this.start.wall = false;
+        this.end = this.grid[this.rows - 2][this.cols - 1]; // ending cell
+        this.start.wall = false; // Make sure those cells are not walls
         this.end.wall = false;
 
         this.openSet = [];
@@ -49,8 +53,15 @@ class MazePrototype {
         this.openSet.push(this.start);
     }
 
+    /**
+     * Create the grid
+     * @see This method depends on the class extending this prototype.
+     */
     initGrid() {}
 
+    /**
+     * Implementation of the A* Algorithm for path finding. The method yield on each step of the algorithm.
+     */
     *aStar() {
         while(this.openSet.length > 0) { // if still searching
             //we can order them with "openSet.sort(spotComparison);"
@@ -80,20 +91,18 @@ class MazePrototype {
                     // Is this a better path than before?
                     let newPath = false;
                     if (this.openSet.includes(neighbor)) {
-                        if (tempG < neighbor.g) {
-                            neighbor.g = tempG;
+                        if (tempG < neighbor.g) { // If better way to go to neighbor
                             newPath = true;
                         }
                     } 
-                    else {
-                        neighbor.g = tempG;
+                    else { // If new possible way
                         newPath = true;
                         this.openSet.push(neighbor);
                         neighbor.show(Maze.COLORS.cGandY);
                     }
 
-                    // Yes, it's a better path
-                    if (newPath) {
+                    if (newPath) { // Yes, it's a better path
+                        neighbor.g = tempG;
                         neighbor.h = this.heuristics(neighbor, this.end);
                         neighbor.f = neighbor.g + neighbor.h;
                         neighbor.previous = this.current;
@@ -107,17 +116,20 @@ class MazePrototype {
             yield;
         }
         
-        if (this.current === this.end) {
+        if (this.current === this.end) { // If exit found
             console.log("Done!, there is a way!");
         }
         else { //if no other way to go
             console.log("Ups, there is no way to go to the end");
         }
         this.updatePath();
-        noLoop();
+        noLoop(); // Stop drawing
         onLoop = false;
     }
 
+    /**
+     * Updates the path variable using backtracking
+     */
     updatePath() {
         this.path = [];
         let temp = this.current;
@@ -128,6 +140,9 @@ class MazePrototype {
         }
     }
 
+    /**
+     * Prints on console the current path
+     */
     printPath() {
         // Show the way
         for(let p = this.path.length - 1, q = 1; p > 0; p--, q++){
@@ -135,11 +150,20 @@ class MazePrototype {
         }
     }
 
-    heuristics(a, b){//dist a to b (heuristitcs)
+    /**
+     * @param {Spot} a - One Spot
+     * @param {Spot} b - The other Spot
+     * @returns The distance (heuristics) from a to b.
+     */
+    heuristics(a, b) {
         return dist(a.i, a.j, b.i, b.j);
     }
 }
 
+/**
+ * This class generates a maze usign Prim's algorithm.
+ * @see mazeGenerators.js to see the logic used.
+ */
 class Maze extends MazePrototype {
     constructor(canvasWidth, canvasHeight, cellWidth, cellHeight=cellWidth) {
         super(canvasWidth, canvasHeight, cellWidth, cellHeight);
@@ -150,6 +174,9 @@ class Maze extends MazePrototype {
     }
 }
 
+/**
+ * Generates a maze with walls generated at random
+ */
 class RandomMaze extends MazePrototype {
     constructor(canvasWidth, canvasHeight, cellWidth, cellHeight=cellWidth) {
         super(canvasWidth, canvasHeight, cellWidth, cellHeight);
